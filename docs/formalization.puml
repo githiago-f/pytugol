@@ -1,0 +1,49 @@
+@startebnf
+header Programming language formalization
+title Gramática
+
+LETRA = "a-z" | "A-Z";
+DIGITO = "0-9";
+LOGICO = "falso" | "verdadeiro";
+NULO = ? NULO ?;
+TEXTO = "&quote;", "regex([^&quote;])", "&quote;";
+TIPO = NUMERICO | TEXTO | NULO | LOGICO;
+
+IDENTIFICADOR = {LETRA}-, {DIGITO};
+
+PROGRAM = [ FUNCAO ] | [ DECLARACAO ] | [ EXPRESSAO ];
+
+FUNCAO = IDENTIFICADOR
+, "("
+, {
+    IDENTIFICADOR (* Parametros *)
+    ', ":" , TIPO '
+    , [","] }
+, ")"
+', "->", TIPO '
+, ":"
+, ( EXPRESSAO | EXPRESSAO_EM_BLOCO);
+
+EXPRESSAO =
+    'Conditional expressions (se can be a one-liner)'
+    "se", EXPRESSAO, ":",
+        (EXPRESSAO | EXPRESSAO_EM_BLOCO),
+        ["ouentao", (EXPRESSAO | EXPRESSAO_EM_BLOCO)]
+    | (
+        (
+            "enquanto", EXPRESSAO, ":" |
+            "para", "(", EXPRESSAO, ")", ":"
+        ),
+        (EXPRESSAO | EXPRESSAO_EM_BLOCO)
+    ) |
+    EXPRESSAO, ("+" | "*" | "/" | "=" | "-" | "+=" | "-=" | "ou" | "e" | "==" | "!=" | ","), EXPRESSAO |
+    ("+" | "-" | "nao"), EXPRESSAO|
+    IDENTIFICADOR, {",", IDENTIFICADOR}, "=", EXPRESSAO, {EXPRESSAO} |
+    'Immediate evaluation expressions'
+    IDENTIFICADOR, "(", { EXPRESSAO }, ")" |
+    ["\n", n * "\s"] (* Coluna deve\n ser maior (n + 1) *), EXPRESSAO;
+
+RETORNA = "retorna", EXPRESSAO;
+
+footer Thiago Farias - Esteio, RS - 2025
+@endebnf
