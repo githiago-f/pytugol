@@ -1,8 +1,9 @@
 import {ExpressionSyntax} from "./expression.syntax.ts";
-import {NumberExpressionSyntax} from "./number-expression.syntax.ts";
+import {LiteralExpressionSyntax} from "./literal-expression.syntax.ts";
 import {BinaryExperssionSyntax} from "./binary-experssion.syntax.ts";
 import {SyntaxKind} from "./syntax-kind.ts";
 import {ParenthesizedExpressionSyntax} from "./parenthesized-expression.syntax.ts";
+import {UnaryExpressionSyntax} from "./unary-expression.syntax.ts";
 
 export class Evaluator {
     constructor(private readonly _root: ExpressionSyntax) {}
@@ -12,8 +13,20 @@ export class Evaluator {
     }
 
     private evaluateExpression(node: ExpressionSyntax): number {
-        if(node instanceof NumberExpressionSyntax) {
-            return node.numberToken.value as number;
+        if(node instanceof LiteralExpressionSyntax) {
+            return node.literalToken.value as number;
+        }
+
+        if(node instanceof UnaryExpressionSyntax) {
+            const operand = this.evaluateExpression(node.operand);
+            switch (node.operatorToken.kind) {
+                case SyntaxKind.PlusToken:
+                    return operand;
+                case SyntaxKind.MinusToken:
+                    return -operand;
+                default:
+                    throw new Error("Unexpected unary expression");
+            }
         }
 
         if(node instanceof BinaryExperssionSyntax) {

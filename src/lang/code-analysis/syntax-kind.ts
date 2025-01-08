@@ -1,5 +1,7 @@
 export enum SyntaxKind {
-    NumberToken = 'NumberToken',
+    // special tokens
+    BadToken = 'BadToken',
+    EndOfFileToken = 'EndOfFileToken',
     WhitespaceToken = 'WhitespaceToken',
     PlusToken = 'PlusToken',
     MinusToken = 'MinusToken',
@@ -7,9 +9,13 @@ export enum SyntaxKind {
     SlashToken = 'SlashToken',
     OpenParenthesisToken = 'OpenParenthesisToken',
     CloseParenthesisToken = 'CloseParenthesisToken',
-    BadToken = 'BadToken',
-    EndOfFileToken = 'EndOfFileToken',
-    NumberExpression = 'NumberExpression',
+
+    // literals
+    NumberToken = 'NumberToken',
+
+    // expressions
+    LiteralExpression = 'LiteralExpression',
+    UnaryExpression = 'UnaryExpression',
     BinaryExpression = 'BinaryExpression',
     ParenthesizedExpression = 'ParenthesizedExpression',
 }

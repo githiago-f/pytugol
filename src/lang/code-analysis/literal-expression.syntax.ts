@@ -2,13 +2,13 @@ import {SyntaxToken} from "./syntax-token.ts";
 import {SyntaxKind} from "./syntax-kind.ts";
 import {ExpressionSyntax} from "./expression.syntax.ts";
 
-export class NumberExpressionSyntax extends ExpressionSyntax {
+export class LiteralExpressionSyntax extends ExpressionSyntax {
     public readonly kind: SyntaxKind;
     public readonly children: SyntaxToken[];
 
-    constructor(public numberToken: SyntaxToken) {
+    constructor(public literalToken: SyntaxToken) {
         super();
-        this.kind = SyntaxKind.NumberExpression;
-        this.children = [this.numberToken];
+        this.kind = SyntaxKind.LiteralExpression;
+        this.children = [this.literalToken];
     }
 }
