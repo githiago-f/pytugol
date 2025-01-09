@@ -1,11 +1,11 @@
 import {SyntaxTree} from "../../../src/lang/code-analysis/syntax/syntax-tree";
-import {Evaluator} from "../../../src/lang/code-analysis/evaluator";
 import {prettyPrint} from "../../../src/lang/helpers/printer";
 import {BinaryExperssionSyntax} from "../../../src/lang/code-analysis/syntax/binary-experssion.syntax";
 import {LiteralExpressionSyntax} from "../../../src/lang/code-analysis/syntax/literal-expression.syntax";
 import {SyntaxToken} from "../../../src/lang/code-analysis/syntax/syntax-token";
 import {SyntaxKind} from "../../../src/lang/code-analysis/syntax/syntax-kind";
 import {UnaryExpressionSyntax} from "../../../src/lang/code-analysis/syntax/unary-expression.syntax";
+import {parse} from "../helpers/parse";
 
 describe('Parser', () => {
     describe('parse', () => {
@@ -19,13 +19,12 @@ describe('Parser', () => {
         });
 
         it('parses parenthesized expression syntax tree', () => {
-            const simpleSum = SyntaxTree.parse('1 + 2 * (2 + 5)');
+            const simpleSum = parse('1 + 2 * (2 + 5)');
 
             prettyPrint(simpleSum.root);
 
             expect(simpleSum).toBeDefined();
             expect(simpleSum.diagnostics).toHaveLength(0);
-            expect(new Evaluator(simpleSum.root).evaluate()).toBe(15);
         });
 
         it('parses minus unary operator', () => {

@@ -94,14 +94,20 @@ export class Parser {
     }
 
     private parsePrimaryExpression(): ExpressionSyntax {
-        if(this.current.kind === SyntaxKind.OpenParenthesisToken) {
-            const left = this.nextToken();
-            const expression = this.parseExpression();
-            const right = this.matchToken(SyntaxKind.CloseParenthesisToken);
-            return new ParenthesizedExpressionSyntax(left, expression, right);
+        switch (this.current.kind) {
+            case SyntaxKind.OpenParenthesisToken:
+                const left = this.nextToken();
+                const expression = this.parseExpression();
+                const right = this.matchToken(SyntaxKind.CloseParenthesisToken);
+                return new ParenthesizedExpressionSyntax(left, expression, right);
+            case SyntaxKind.TrueKeywordToken:
+            case SyntaxKind.FalseKeywordToken:
+                const keywordToken = this.nextToken();
+                const value = keywordToken.kind === SyntaxKind.TrueKeywordToken;
+                return new LiteralExpressionSyntax(keywordToken, value);
+            default:
+                const numberToken = this.matchToken(SyntaxKind.NumberToken);
+                return new LiteralExpressionSyntax(numberToken);
         }
-
-        const numberToken = this.matchToken(SyntaxKind.NumberToken);
-        return new LiteralExpressionSyntax(numberToken);
     }
 }

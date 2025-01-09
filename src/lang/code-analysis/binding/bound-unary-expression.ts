@@ -3,7 +3,8 @@ import {BoundExpression} from "./bound-expression.ts";
 
 export enum BoundUnaryOperatorKind {
     IDENTITY = 'Identity',
-    NEGATION = 'Negation'
+    NEGATION = 'Negation',
+    LOGICAL_NEGATION = 'LogicalNegation',
 }
 
 export class BoundUnaryExpression extends BoundExpression {

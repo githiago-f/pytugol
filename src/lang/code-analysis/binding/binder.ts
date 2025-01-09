@@ -25,7 +25,7 @@ export class Binder {
     }
 
     private bindLiteralExpression(syntax: LiteralExpressionSyntax) {
-        const value = (syntax.literalToken.value as number) ?? 0;
+        const value = (syntax.value as number) ?? 0;
         return new BoundLiteralExpression(value);
     }
 
@@ -60,34 +60,48 @@ export class Binder {
     }
 
     private bindUnaryOperatorKind(kind: SyntaxKind, operandType: string): BoundUnaryOperatorKind | null {
-        if(operandType !== 'number')
-            return null;
-
-        switch (kind) {
-            case SyntaxKind.PlusToken:
-                return BoundUnaryOperatorKind.IDENTITY;
-            case SyntaxKind.MinusToken:
-                return BoundUnaryOperatorKind.NEGATION;
-            default:
-                throw new Error(`Unknown unary operator:: ${kind}`);
+        if(operandType === 'number') {
+            switch (kind) {
+                case SyntaxKind.PlusToken:
+                    return BoundUnaryOperatorKind.IDENTITY;
+                case SyntaxKind.MinusToken:
+                    return BoundUnaryOperatorKind.NEGATION;
+            }
         }
+
+        if (operandType === 'boolean') {
+            switch (kind) {
+                case SyntaxKind.NotToken:
+                    return BoundUnaryOperatorKind.LOGICAL_NEGATION;
+            }
+        }
+
+        return null;
     }
 
     private bindBinaryOperatorKind(kind: SyntaxKind, left: string, right: string): BoundBinaryOperatorKind | null {
-        if(left !== 'number' || right !== 'number')
-            return null;
-
-        switch (kind) {
-            case SyntaxKind.PlusToken:
-                return BoundBinaryOperatorKind.Addition;
-            case SyntaxKind.MinusToken:
-                return BoundBinaryOperatorKind.Subtraction;
-            case SyntaxKind.StarToken:
-                return BoundBinaryOperatorKind.Multiplication;
-            case SyntaxKind.SlashToken:
-                return BoundBinaryOperatorKind.Division;
-            default:
-                throw new Error(`Unknown binary operator:: ${kind}`);
+        if(left === 'number' && right === 'number') {
+            switch (kind) {
+                case SyntaxKind.PlusToken:
+                    return BoundBinaryOperatorKind.Addition;
+                case SyntaxKind.MinusToken:
+                    return BoundBinaryOperatorKind.Subtraction;
+                case SyntaxKind.StarToken:
+                    return BoundBinaryOperatorKind.Multiplication;
+                case SyntaxKind.SlashToken:
+                    return BoundBinaryOperatorKind.Division;
+            }
         }
+
+        if(left === 'boolean' && right === 'boolean') {
+            switch (kind) {
+                case SyntaxKind.AndToken:
+                    return BoundBinaryOperatorKind.LogicalAnd;
+                case SyntaxKind.OrToken:
+                    return BoundBinaryOperatorKind.LogicalOr;
+            }
+        }
+
+        return null;
     }
 }

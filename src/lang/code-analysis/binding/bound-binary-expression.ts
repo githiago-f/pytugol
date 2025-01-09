@@ -6,6 +6,8 @@ export enum BoundBinaryOperatorKind {
     Subtraction = 'Subtraction',
     Multiplication = 'Multiplication',
     Division = 'Division',
+    LogicalOr = 'LogicalOr',
+    LogicalAnd = 'LogicalAnd',
 }
 
 export class BoundBinaryExpression extends BoundExpression {

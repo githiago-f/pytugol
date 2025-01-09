@@ -6,7 +6,10 @@ export class LiteralExpressionSyntax extends ExpressionSyntax {
     public readonly kind: SyntaxKind;
     public readonly children: SyntaxToken[];
 
-    constructor(public literalToken: SyntaxToken) {
+    constructor(
+        public readonly literalToken: SyntaxToken,
+        public readonly value: any = literalToken.value
+    ) {
         super();
         this.kind = SyntaxKind.LiteralExpression;
         this.children = [this.literalToken];

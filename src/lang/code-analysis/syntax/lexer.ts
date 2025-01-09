@@ -1,6 +1,7 @@
 import {SyntaxToken} from "./syntax-token.ts";
 import {SyntaxKind} from "./syntax-kind.ts";
-import {isANumber, isWhitespace} from "../../helpers/checkers.ts";
+import {isANumber, isLetter, isWhitespace} from "../../helpers/checkers.ts";
+import {SyntaxFacts} from "./syntax-facts.ts";
 
 export class Lexer {
     private _position = 0;
@@ -52,9 +53,19 @@ export class Lexer {
             const start = this._position;
             while(isWhitespace(this.current)) this.next();
 
-            const length = this._position - start;
-            const text = this._text.substring(start, length);
+            const text = this._text.substring(start, this._position);
+
             return new SyntaxToken(SyntaxKind.WhitespaceToken, text, null, start);
+        }
+
+        if(isLetter(this.current)) {
+            const start = this._position;
+            while(isLetter(this.current)) this.next();
+
+            const text = this._text.substring(start, this._position);
+            const kind = SyntaxFacts.getKeywordKind(text);
+
+            return new SyntaxToken(kind, text, null, start);
         }
 
         switch(this.current) {

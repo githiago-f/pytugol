@@ -5,6 +5,9 @@ export enum SyntaxKind {
     WhitespaceToken = 'WhitespaceToken',
     PlusToken = 'PlusToken',
     MinusToken = 'MinusToken',
+    NotToken = 'NotToken',
+    OrToken = 'OrToken',
+    AndToken = 'AndToken',
     StarToken = 'StarToken',
     SlashToken = 'SlashToken',
     OpenParenthesisToken = 'OpenParenthesisToken',
@@ -12,6 +15,11 @@ export enum SyntaxKind {
 
     // literals
     NumberToken = 'NumberToken',
+
+    // keywords
+    FalseKeywordToken = 'FalseKeywordToken',
+    TrueKeywordToken = 'TrueKeywordToken',
+    IdentifierToken = 'IdentifierToken',
 
     // expressions
     LiteralExpression = 'LiteralExpression',

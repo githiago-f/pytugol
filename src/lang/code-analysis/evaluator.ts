@@ -6,11 +6,11 @@ import {BoundBinaryExpression, BoundBinaryOperatorKind} from "./binding/bound-bi
 export class Evaluator {
     constructor(private readonly _root: BoundExpression) {}
 
-    public evaluate() {
+    public evaluate(): any {
         return this.evaluateExpression(this._root);
     }
 
-    private evaluateExpression(exp: BoundExpression): number {
+    private evaluateExpression(exp: BoundExpression): any {
         if(exp instanceof BoundLiteralExpression) {
             return exp.value;
         }
@@ -21,7 +21,9 @@ export class Evaluator {
                 case BoundUnaryOperatorKind.IDENTITY:
                     return operand;
                 case BoundUnaryOperatorKind.NEGATION:
-                    return -operand;
+                    return -(operand as number);
+                case BoundUnaryOperatorKind.LOGICAL_NEGATION:
+                    return !(operand as boolean);
                 default:
                     throw new Error("Unexpected unary operator " + exp.operatorKind);
             }
@@ -33,13 +35,17 @@ export class Evaluator {
 
             switch(exp.operatorKind) {
                 case BoundBinaryOperatorKind.Addition:
-                    return left + right;
+                    return (left as number) + (right as number);
                 case BoundBinaryOperatorKind.Division:
-                    return left / right;
+                    return (left as number) / (right as number);
                 case BoundBinaryOperatorKind.Multiplication:
-                    return left * right;
+                    return (left as number) * (right as number);
                 case BoundBinaryOperatorKind.Subtraction:
-                    return left - right;
+                    return (left as number) - (right as number);
+                case BoundBinaryOperatorKind.LogicalOr:
+                    return (left as boolean) || (right as boolean);
+                case BoundBinaryOperatorKind.LogicalAnd:
+                    return (left as boolean) && (right as boolean);
                 default:
                     throw new Error("Unrecognized expression: " + exp.kind);
             }
