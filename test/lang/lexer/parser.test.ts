@@ -1,5 +1,5 @@
 import {SyntaxTree} from "../../../src/lang/code-analysis/syntax/syntax-tree";
-import {Evaluator} from "../../../src/lang/code-analysis/syntax/evaluator";
+import {Evaluator} from "../../../src/lang/code-analysis/evaluator";
 import {prettyPrint} from "../../../src/lang/helpers/printer";
 import {BinaryExperssionSyntax} from "../../../src/lang/code-analysis/syntax/binary-experssion.syntax";
 import {LiteralExpressionSyntax} from "../../../src/lang/code-analysis/syntax/literal-expression.syntax";
