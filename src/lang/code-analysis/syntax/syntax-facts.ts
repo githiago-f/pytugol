@@ -6,7 +6,7 @@ export class SyntaxFacts {
             case SyntaxKind.MinusToken:
             case SyntaxKind.PlusToken:
             case SyntaxKind.NotToken:
-                return 5;
+                return 6;
 
             default:
                 return 0;
@@ -17,10 +17,18 @@ export class SyntaxFacts {
         switch (kind) {
             case SyntaxKind.StarToken:
             case SyntaxKind.SlashToken:
-                return 4;
+                return 5;
 
             case SyntaxKind.PlusToken:
             case SyntaxKind.MinusToken:
+                return 4;
+
+            case SyntaxKind.EqEqToken:
+            case SyntaxKind.NEqToken:
+            case SyntaxKind.LteToken:
+            case SyntaxKind.LtToken:
+            case SyntaxKind.GteToken:
+            case SyntaxKind.GtToken:
                 return 3;
 
             case SyntaxKind.OrToken:
@@ -36,9 +44,9 @@ export class SyntaxFacts {
 
     static getKeywordKind(text: string) {
         switch (text) {
-            case 'verdadeiro':
+            case 'Verdadeiro':
                 return SyntaxKind.TrueKeywordToken;
-            case 'falso':
+            case 'Falso':
                 return SyntaxKind.FalseKeywordToken;
             case 'nao':
                 return SyntaxKind.NotToken;

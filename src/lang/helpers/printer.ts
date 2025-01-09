@@ -1,8 +1,7 @@
 import {SyntaxNode} from "../code-analysis/syntax/syntax-node.ts";
 import {SyntaxToken} from "../code-analysis/syntax/syntax-token.ts";
 
-export function prettyPrint(node: SyntaxNode, indent = "", isLast = true)
-{
+export function prettyPrint(node: SyntaxNode, indent = "", isLast = true) {
     const marker = isLast ? "└──" : "├──";
 
     let line = indent;
@@ -15,12 +14,14 @@ export function prettyPrint(node: SyntaxNode, indent = "", isLast = true)
         line += node.value;
     }
 
-    console.log(line + "\n");
-
     indent += isLast ? "    " : "│   ";
 
     const lastChild = node.children[node.children.length-1];
 
+    line += '\n';
+
     for(const child of node.children)
-        prettyPrint(child, indent, child == lastChild);
+        line += prettyPrint(child, indent, child == lastChild);
+
+    return line;
 }

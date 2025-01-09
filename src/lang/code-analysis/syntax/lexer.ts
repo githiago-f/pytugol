@@ -24,10 +24,18 @@ export class Lexer {
     }
 
     private get current(): string {
-        if (this._position >= this._text.length) {
+        return this.peek(0);
+    }
+    private get lookahead(): string {
+        return this.peek(1);
+    }
+
+    private peek(offset = 0) {
+        const index = this._position + offset;
+        if (index >= this._text.length) {
             return "\0";
         }
-        return this._text[this._position];
+        return this._text[index];
     }
 
     public nextToken(): SyntaxToken {
@@ -75,6 +83,22 @@ export class Lexer {
             case '/': return new SyntaxToken(SyntaxKind.SlashToken, '/', null, this._position++);
             case '(': return new SyntaxToken(SyntaxKind.OpenParenthesisToken, '(', null, this._position++);
             case ')': return new SyntaxToken(SyntaxKind.CloseParenthesisToken, ')', null, this._position++);
+            case '=':
+                if(this.lookahead === '=')
+                    return new SyntaxToken(SyntaxKind.EqEqToken, '==', null, this._position+=2);
+                break;
+            case '!':
+                if(this.lookahead === '=')
+                    return new SyntaxToken(SyntaxKind.NEqToken, '!=', null, this._position+=2);
+                break;
+            case '<':
+                if(this.lookahead === '=')
+                    return new SyntaxToken(SyntaxKind.LteToken, '<=', null, this._position+=2);
+                return new SyntaxToken(SyntaxKind.LtToken, '<', null, this._position+=2);
+            case '>':
+                if(this.lookahead === '=')
+                    return new SyntaxToken(SyntaxKind.GteToken, '>=', null, this._position+=2);
+                return new SyntaxToken(SyntaxKind.GtToken, '>', null, this._position+=2);
         }
 
         this._diagnostics.push("ERROR: Unexpected character: " + this.current + " at line " + this._line + " column " + this._column);

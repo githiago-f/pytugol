@@ -6,7 +6,7 @@ export class BoundUnaryOperator {
         public readonly syntaxKind: SyntaxKind,
         public readonly kind: BoundUnaryOperatorKind,
         public readonly operandType: string,
-        public readonly resultType?: string
+        public readonly resultType: string = operandType
     ) {}
 
     private static _operators = [

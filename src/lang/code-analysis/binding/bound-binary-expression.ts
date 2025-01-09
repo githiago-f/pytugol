@@ -9,6 +9,12 @@ export enum BoundBinaryOperatorKind {
     Division = 'Division',
     LogicalOr = 'LogicalOr',
     LogicalAnd = 'LogicalAnd',
+    Equals = 'Equals',
+    NotEquals = 'NotEquals',
+    GreaterThan = 'GreaterThan',
+    GreaterEqualThan = 'GreaterEqualThan',
+    LessEqualThan = 'LessEqualThan',
+    LessThan = 'LessThan',
 }
 
 export class BoundBinaryExpression extends BoundExpression {
@@ -25,6 +31,6 @@ export class BoundBinaryExpression extends BoundExpression {
     }
 
     override get type() {
-        return this.left.type;
+        return this.operator.resultType;
     }
 }

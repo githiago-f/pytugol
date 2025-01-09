@@ -12,6 +12,12 @@ export enum SyntaxKind {
     SlashToken = 'SlashToken',
     OpenParenthesisToken = 'OpenParenthesisToken',
     CloseParenthesisToken = 'CloseParenthesisToken',
+    EqEqToken = 'EqEqToken',
+    NEqToken = 'NEqToken',
+    GtToken = 'GtToken',
+    GteToken = 'GteToken',
+    LtToken = 'LtToken',
+    LteToken = 'LteToken',
 
     // literals
     NumberToken = 'NumberToken',

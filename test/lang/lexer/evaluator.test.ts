@@ -22,20 +22,26 @@ describe('Evaluator', () => {
         });
 
         it('evaluate true and false', () => {
-            expect(evaluate('verdadeiro')).toBe(true);
-            expect(evaluate('falso')).toBe(false);
+            expect(evaluate('Verdadeiro')).toBe(true);
+            expect(evaluate('Falso')).toBe(false);
+        });
+
+        it('evaluate equality and difference operators', () => {
+            expect(evaluate('1 == 1')).toBe(true);
+            expect(evaluate('1 != 2')).toBe(true);
+            expect(evaluate('3 == 3')).toBe(true);
+            expect(evaluate('3 != 3')).toBe(false);
         });
 
         it('evaluate or expressions', () => {
-            expect(evaluate('verdadeiro ou falso')).toBe(true);
-            expect(evaluate('falso ou verdadeiro')).toBe(true);
-            expect(evaluate('falso ou falso')).toBe(false);
+            expect(evaluate('Verdadeiro ou Falso')).toBe(true);
+            expect(evaluate('Falso ou Verdadeiro')).toBe(true);
+            expect(evaluate('Falso ou Falso')).toBe(false);
         });
 
         it('evaluate and expressions', () => {
-            expect(evaluate('falso e falso')).toBe(false);
-            expect(evaluate('verdadeiro e falso')).toBe(false);
-            expect(evaluate('verdadeiro e verdadeiro')).toBe(true);
+            expect(evaluate('1 == 1 e 1 == 3')).toBe(false);
+            expect(evaluate('1 == 1 e Falso')).toBe(false);
         });
     });
 });

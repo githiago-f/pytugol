@@ -6,18 +6,28 @@ export class BoundBinaryOperator {
         public readonly syntaxKind: SyntaxKind,
         public readonly kind: BoundBinaryOperatorKind,
         public readonly leftType: string,
-        public readonly rightType: string,
-        public readonly resultType?: string
+        public readonly rightType: string = leftType,
+        public readonly resultType: string = rightType
     ) {}
 
     private static _operators = [
-        new BoundBinaryOperator(SyntaxKind.AndToken, BoundBinaryOperatorKind.LogicalAnd, 'boolean', 'boolean'),
-        new BoundBinaryOperator(SyntaxKind.OrToken, BoundBinaryOperatorKind.LogicalOr, 'boolean', 'boolean'),
+        new BoundBinaryOperator(SyntaxKind.AndToken, BoundBinaryOperatorKind.LogicalAnd, 'boolean'),
+        new BoundBinaryOperator(SyntaxKind.OrToken, BoundBinaryOperatorKind.LogicalOr, 'boolean'),
 
-        new BoundBinaryOperator(SyntaxKind.PlusToken, BoundBinaryOperatorKind.Addition, 'number', 'number'),
-        new BoundBinaryOperator(SyntaxKind.MinusToken, BoundBinaryOperatorKind.Subtraction, 'number', 'number'),
-        new BoundBinaryOperator(SyntaxKind.StarToken, BoundBinaryOperatorKind.Multiplication, 'number', 'number'),
-        new BoundBinaryOperator(SyntaxKind.SlashToken, BoundBinaryOperatorKind.Division, 'number', 'number'),
+        new BoundBinaryOperator(SyntaxKind.EqEqToken, BoundBinaryOperatorKind.Equals, 'boolean'),
+        new BoundBinaryOperator(SyntaxKind.NEqToken, BoundBinaryOperatorKind.NotEquals, 'boolean'),
+
+        new BoundBinaryOperator(SyntaxKind.PlusToken, BoundBinaryOperatorKind.Addition, 'number'),
+        new BoundBinaryOperator(SyntaxKind.MinusToken, BoundBinaryOperatorKind.Subtraction, 'number'),
+        new BoundBinaryOperator(SyntaxKind.StarToken, BoundBinaryOperatorKind.Multiplication, 'number'),
+        new BoundBinaryOperator(SyntaxKind.SlashToken, BoundBinaryOperatorKind.Division, 'number'),
+
+        new BoundBinaryOperator(SyntaxKind.EqEqToken, BoundBinaryOperatorKind.Equals, 'number', 'number', 'boolean'),
+        new BoundBinaryOperator(SyntaxKind.NEqToken, BoundBinaryOperatorKind.NotEquals, 'number', 'number', 'boolean'),
+        new BoundBinaryOperator(SyntaxKind.GtToken, BoundBinaryOperatorKind.GreaterThan, 'number', 'number', 'boolean'),
+        new BoundBinaryOperator(SyntaxKind.GteToken, BoundBinaryOperatorKind.GreaterEqualThan, 'number', 'number', 'boolean'),
+        new BoundBinaryOperator(SyntaxKind.LtToken, BoundBinaryOperatorKind.LessThan, 'number', 'number', 'boolean'),
+        new BoundBinaryOperator(SyntaxKind.LteToken, BoundBinaryOperatorKind.LessEqualThan, 'number', 'number', 'boolean'),
     ];
 
     static bind(kind: SyntaxKind, leftType: string, rightType: string) {

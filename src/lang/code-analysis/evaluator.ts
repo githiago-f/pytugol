@@ -46,6 +46,20 @@ export class Evaluator {
                     return (left as boolean) || (right as boolean);
                 case BoundBinaryOperatorKind.LogicalAnd:
                     return (left as boolean) && (right as boolean);
+
+                case BoundBinaryOperatorKind.NotEquals:
+                    return left !== right;
+                case BoundBinaryOperatorKind.Equals:
+                    return left === right;
+                case BoundBinaryOperatorKind.LessEqualThan:
+                    return left <= right;
+                case BoundBinaryOperatorKind.GreaterEqualThan:
+                    return left >= right;
+                case BoundBinaryOperatorKind.LessThan:
+                    return left < right;
+                case BoundBinaryOperatorKind.GreaterThan:
+                    return left > right;
+
                 default:
                     throw new Error("Unrecognized expression: " + exp.kind);
             }

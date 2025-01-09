@@ -21,6 +21,6 @@ export class BoundUnaryExpression extends BoundExpression {
     }
 
     override get type() {
-        return this.operand.type;
+        return this.operator.resultType;
     }
 }

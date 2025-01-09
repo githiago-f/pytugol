@@ -1,9 +1,12 @@
 import {SyntaxTree} from "../../../src/lang/code-analysis/syntax/syntax-tree";
 import {Evaluator} from "../../../src/lang/code-analysis/evaluator";
 import {Binder} from "../../../src/lang/code-analysis/binding/binder";
+import {prettyPrint} from "../../../src/lang/helpers/printer";
 
 export function parse(text: string): SyntaxTree {
-    return SyntaxTree.parse(text);
+    const tree = SyntaxTree.parse(text);
+    console.log(prettyPrint(tree.root));
+    return tree;
 }
 
 export function bind(text: string) {
@@ -13,15 +16,15 @@ export function bind(text: string) {
 
     binder.diagnostics.push(...parsed.diagnostics);
 
+    for(const diagnostic of binder.diagnostics) {
+        console.log(diagnostic);
+    }
+
     return {binder, expression};
 }
 
 export function evaluate(text: string): any {
-    const { binder, expression } = bind(text);
-
-    for(const diagnostic of binder.diagnostics) {
-        console.log(diagnostic);
-    }
+    const { expression } = bind(text);
 
     return new Evaluator(expression).evaluate();
 }
