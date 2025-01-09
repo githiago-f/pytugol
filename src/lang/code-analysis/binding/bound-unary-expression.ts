@@ -1,5 +1,6 @@
 import {BoundNodeKind} from "./bound-node-kind.ts";
 import {BoundExpression} from "./bound-expression.ts";
+import {BoundUnaryOperator} from "./bound-unary-operator.ts";
 
 export enum BoundUnaryOperatorKind {
     IDENTITY = 'Identity',
@@ -9,7 +10,7 @@ export enum BoundUnaryOperatorKind {
 
 export class BoundUnaryExpression extends BoundExpression {
     constructor(
-        public readonly operatorKind: BoundUnaryOperatorKind,
+        public readonly operator: BoundUnaryOperator,
         public readonly  operand: BoundExpression
     ) {
         super();

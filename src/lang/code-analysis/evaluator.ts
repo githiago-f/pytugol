@@ -17,7 +17,7 @@ export class Evaluator {
 
         if(exp instanceof BoundUnaryExpression) {
             const operand = this.evaluateExpression(exp.operand);
-            switch (exp.operatorKind) {
+            switch (exp.operator.kind) {
                 case BoundUnaryOperatorKind.IDENTITY:
                     return operand;
                 case BoundUnaryOperatorKind.NEGATION:
@@ -25,7 +25,7 @@ export class Evaluator {
                 case BoundUnaryOperatorKind.LOGICAL_NEGATION:
                     return !(operand as boolean);
                 default:
-                    throw new Error("Unexpected unary operator " + exp.operatorKind);
+                    throw new Error("Unexpected unary operator " + exp.operator.kind);
             }
         }
 
@@ -33,7 +33,7 @@ export class Evaluator {
             const left = this.evaluateExpression(exp.left);
             const right = this.evaluateExpression(exp.right);
 
-            switch(exp.operatorKind) {
+            switch(exp.operator.kind) {
                 case BoundBinaryOperatorKind.Addition:
                     return (left as number) + (right as number);
                 case BoundBinaryOperatorKind.Division:

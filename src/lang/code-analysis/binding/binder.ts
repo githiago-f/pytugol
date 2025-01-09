@@ -5,8 +5,10 @@ import {UnaryExpressionSyntax} from "../syntax/unary-expression.syntax.ts";
 import {BinaryExperssionSyntax} from "../syntax/binary-experssion.syntax.ts";
 import {BoundExpression} from "./bound-expression.ts";
 import {BoundLiteralExpression} from "./bound-literal-expression.ts";
-import {BoundUnaryExpression, BoundUnaryOperatorKind} from "./bound-unary-expression.ts";
-import {BoundBinaryExpression, BoundBinaryOperatorKind} from "./bound-binary-expression.ts";
+import {BoundUnaryExpression} from "./bound-unary-expression.ts";
+import {BoundBinaryExpression} from "./bound-binary-expression.ts";
+import {BoundBinaryOperator} from "./bound-binary-operator.ts";
+import {BoundUnaryOperator} from "./bound-unary-operator.ts";
 
 export class Binder {
     public readonly diagnostics: string[] = [];
@@ -31,7 +33,7 @@ export class Binder {
 
     private bindUnaryExpression(syntax: UnaryExpressionSyntax) {
         const boundOperand = this.bindExpression(syntax.operand);
-        const boundOperator = this.bindUnaryOperatorKind(syntax.operatorToken.kind, boundOperand.type);
+        const boundOperator = BoundUnaryOperator.bind(syntax.operatorToken.kind, boundOperand.type);
 
         if(boundOperator === null) {
             this.diagnostics.push(`ERROR: Unary operator ${syntax.operatorToken.text} is not defined for ${boundOperand.type}`);
@@ -44,7 +46,7 @@ export class Binder {
     private bindBinaryExpression(syntax: BinaryExperssionSyntax) {
         const boundLeft = this.bindExpression(syntax.left);
         const boundRight = this.bindExpression(syntax.right);
-        const boundOperator = this.bindBinaryOperatorKind(
+        const boundOperator = BoundBinaryOperator.bind(
             syntax.operatorToken.kind,
             boundLeft.type,
             boundRight.type
@@ -57,51 +59,5 @@ export class Binder {
         }
 
         return new BoundBinaryExpression(boundLeft, boundOperator, boundRight);
-    }
-
-    private bindUnaryOperatorKind(kind: SyntaxKind, operandType: string): BoundUnaryOperatorKind | null {
-        if(operandType === 'number') {
-            switch (kind) {
-                case SyntaxKind.PlusToken:
-                    return BoundUnaryOperatorKind.IDENTITY;
-                case SyntaxKind.MinusToken:
-                    return BoundUnaryOperatorKind.NEGATION;
-            }
-        }
-
-        if (operandType === 'boolean') {
-            switch (kind) {
-                case SyntaxKind.NotToken:
-                    return BoundUnaryOperatorKind.LOGICAL_NEGATION;
-            }
-        }
-
-        return null;
-    }
-
-    private bindBinaryOperatorKind(kind: SyntaxKind, left: string, right: string): BoundBinaryOperatorKind | null {
-        if(left === 'number' && right === 'number') {
-            switch (kind) {
-                case SyntaxKind.PlusToken:
-                    return BoundBinaryOperatorKind.Addition;
-                case SyntaxKind.MinusToken:
-                    return BoundBinaryOperatorKind.Subtraction;
-                case SyntaxKind.StarToken:
-                    return BoundBinaryOperatorKind.Multiplication;
-                case SyntaxKind.SlashToken:
-                    return BoundBinaryOperatorKind.Division;
-            }
-        }
-
-        if(left === 'boolean' && right === 'boolean') {
-            switch (kind) {
-                case SyntaxKind.AndToken:
-                    return BoundBinaryOperatorKind.LogicalAnd;
-                case SyntaxKind.OrToken:
-                    return BoundBinaryOperatorKind.LogicalOr;
-            }
-        }
-
-        return null;
     }
 }

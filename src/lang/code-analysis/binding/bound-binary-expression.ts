@@ -1,5 +1,6 @@
 import {BoundExpression} from "./bound-expression.ts";
 import {BoundNodeKind} from "./bound-node-kind.ts";
+import {BoundBinaryOperator} from "./bound-binary-operator.ts";
 
 export enum BoundBinaryOperatorKind {
     Addition = 'Addition',
@@ -13,7 +14,7 @@ export enum BoundBinaryOperatorKind {
 export class BoundBinaryExpression extends BoundExpression {
     constructor(
         public readonly left: BoundExpression,
-        public readonly operatorKind: BoundBinaryOperatorKind,
+        public readonly operator: BoundBinaryOperator,
         public readonly right: BoundExpression,
     ) {
         super();
