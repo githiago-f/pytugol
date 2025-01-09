@@ -1,6 +1,6 @@
-import {ExpressionSyntax} from "./expression.syntax.ts";
+import {ExpressionSyntax} from "../expression/expression.syntax.ts";
 import {SyntaxToken} from "./syntax-token.ts";
-import {Parser} from "./parser.ts";
+import {Parser} from "../parser.ts";
 
 export class SyntaxTree {
     constructor(

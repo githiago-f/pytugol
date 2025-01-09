@@ -1,5 +1,5 @@
-import {SyntaxNode} from "../code-analysis/syntax-node.ts";
-import {SyntaxToken} from "../code-analysis/syntax-token.ts";
+import {SyntaxNode} from "../code-analysis/syntax/syntax-node.ts";
+import {SyntaxToken} from "../code-analysis/syntax/syntax-token.ts";
 
 export function prettyPrint(node: SyntaxNode, indent = "", isLast = true)
 {

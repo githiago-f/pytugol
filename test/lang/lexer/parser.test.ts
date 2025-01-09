@@ -1,11 +1,11 @@
-import {SyntaxTree} from "../../../src/lang/code-analysis/syntax-tree";
+import {SyntaxTree} from "../../../src/lang/code-analysis/syntax/syntax-tree";
 import {Evaluator} from "../../../src/lang/code-analysis/evaluator";
 import {prettyPrint} from "../../../src/lang/helpers/printer";
-import {BinaryExperssionSyntax} from "../../../src/lang/code-analysis/binary-experssion.syntax";
-import {LiteralExpressionSyntax} from "../../../src/lang/code-analysis/literal-expression.syntax";
-import {SyntaxToken} from "../../../src/lang/code-analysis/syntax-token";
-import {SyntaxKind} from "../../../src/lang/code-analysis/syntax-kind";
-import {UnaryExpressionSyntax} from "../../../src/lang/code-analysis/unary-expression.syntax";
+import {BinaryExperssionSyntax} from "../../../src/lang/code-analysis/expression/binary-experssion.syntax";
+import {LiteralExpressionSyntax} from "../../../src/lang/code-analysis/expression/literal-expression.syntax";
+import {SyntaxToken} from "../../../src/lang/code-analysis/syntax/syntax-token";
+import {SyntaxKind} from "../../../src/lang/code-analysis/syntax/syntax-kind";
+import {UnaryExpressionSyntax} from "../../../src/lang/code-analysis/expression/unary-expression.syntax";
 
 describe('Parser', () => {
     describe('parse', () => {

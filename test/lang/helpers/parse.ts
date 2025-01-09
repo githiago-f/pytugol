@@ -1,4 +1,4 @@
-import {SyntaxTree} from "../../../src/lang/code-analysis/syntax-tree";
+import {SyntaxTree} from "../../../src/lang/code-analysis/syntax/syntax-tree";
 import {Evaluator} from "../../../src/lang/code-analysis/evaluator";
 
 export function parse(text: string): SyntaxTree {

@@ -1,5 +1,5 @@
-import {SyntaxToken} from "./syntax-token.ts";
-import {SyntaxKind} from "./syntax-kind.ts";
+import {SyntaxToken} from "../syntax/syntax-token.ts";
+import {SyntaxKind} from "../syntax/syntax-kind.ts";
 import {ExpressionSyntax} from "./expression.syntax.ts";
 
 export class LiteralExpressionSyntax extends ExpressionSyntax {
