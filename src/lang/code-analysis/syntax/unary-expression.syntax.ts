@@ -1,7 +1,7 @@
-import {SyntaxKind} from "../syntax/syntax-kind.ts";
-import {SyntaxNode} from "../syntax/syntax-node.ts";
+import {SyntaxKind} from "./syntax-kind.ts";
+import {SyntaxNode} from "./syntax-node.ts";
 import {ExpressionSyntax} from "./expression.syntax.ts";
-import {SyntaxToken} from "../syntax/syntax-token.ts";
+import {SyntaxToken} from "./syntax-token.ts";
 
 export class UnaryExpressionSyntax extends ExpressionSyntax {
     public readonly kind = SyntaxKind.UnaryExpression;

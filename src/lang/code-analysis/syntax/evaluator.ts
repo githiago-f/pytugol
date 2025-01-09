@@ -1,9 +1,9 @@
-import {ExpressionSyntax} from "./expression/expression.syntax.ts";
-import {LiteralExpressionSyntax} from "./expression/literal-expression.syntax.ts";
-import {BinaryExperssionSyntax} from "./expression/binary-experssion.syntax.ts";
-import {SyntaxKind} from "./syntax/syntax-kind.ts";
-import {ParenthesizedExpressionSyntax} from "./expression/parenthesized-expression.syntax.ts";
-import {UnaryExpressionSyntax} from "./expression/unary-expression.syntax.ts";
+import {ExpressionSyntax} from "./expression.syntax.ts";
+import {LiteralExpressionSyntax} from "./literal-expression.syntax.ts";
+import {BinaryExperssionSyntax} from "./binary-experssion.syntax.ts";
+import {SyntaxKind} from "./syntax-kind.ts";
+import {ParenthesizedExpressionSyntax} from "./parenthesized-expression.syntax.ts";
+import {UnaryExpressionSyntax} from "./unary-expression.syntax.ts";
 
 export class Evaluator {
     constructor(private readonly _root: ExpressionSyntax) {}

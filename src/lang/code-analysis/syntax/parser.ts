@@ -1,13 +1,13 @@
-import {SyntaxToken} from "./syntax/syntax-token.ts";
+import {SyntaxToken} from "./syntax-token.ts";
 import {Lexer} from "./lexer.ts";
-import {SyntaxKind} from "./syntax/syntax-kind.ts";
-import {LiteralExpressionSyntax} from "./expression/literal-expression.syntax.ts";
-import {ParenthesizedExpressionSyntax} from "./expression/parenthesized-expression.syntax.ts";
-import {ExpressionSyntax} from "./expression/expression.syntax.ts";
-import {BinaryExperssionSyntax} from "./expression/binary-experssion.syntax.ts";
-import {SyntaxTree} from "./syntax/syntax-tree.ts";
-import {SyntaxFacts} from "./syntax/syntax-facts.ts";
-import {UnaryExpressionSyntax} from "./expression/unary-expression.syntax.ts";
+import {SyntaxKind} from "./syntax-kind.ts";
+import {LiteralExpressionSyntax} from "./literal-expression.syntax.ts";
+import {ParenthesizedExpressionSyntax} from "./parenthesized-expression.syntax.ts";
+import {ExpressionSyntax} from "./expression.syntax.ts";
+import {BinaryExperssionSyntax} from "./binary-experssion.syntax.ts";
+import {SyntaxTree} from "./syntax-tree.ts";
+import {SyntaxFacts} from "./syntax-facts.ts";
+import {UnaryExpressionSyntax} from "./unary-expression.syntax.ts";
 
 export class Parser {
     public diagnostics: string[] = [];

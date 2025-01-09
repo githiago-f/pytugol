@@ -1,6 +1,6 @@
-import {SyntaxToken} from "./syntax/syntax-token.ts";
-import {SyntaxKind} from "./syntax/syntax-kind.ts";
-import {isANumber, isWhitespace} from "../helpers/checkers.ts";
+import {SyntaxToken} from "./syntax-token.ts";
+import {SyntaxKind} from "./syntax-kind.ts";
+import {isANumber, isWhitespace} from "../../helpers/checkers.ts";
 
 export class Lexer {
     private _position = 0;

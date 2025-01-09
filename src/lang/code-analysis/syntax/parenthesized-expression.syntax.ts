@@ -1,6 +1,6 @@
-import {SyntaxNode} from "../syntax/syntax-node.ts";
+import {SyntaxNode} from "./syntax-node.ts";
 import {ExpressionSyntax} from "./expression.syntax.ts";
-import {SyntaxKind} from "../syntax/syntax-kind.ts";
+import {SyntaxKind} from "./syntax-kind.ts";
 
 export class ParenthesizedExpressionSyntax extends ExpressionSyntax {
     public readonly kind: SyntaxKind;

@@ -1,5 +1,5 @@
 import {SyntaxTree} from "../../../src/lang/code-analysis/syntax/syntax-tree";
-import {Evaluator} from "../../../src/lang/code-analysis/evaluator";
+import {Evaluator} from "../../../src/lang/code-analysis/syntax/evaluator";
 
 export function parse(text: string): SyntaxTree {
     return SyntaxTree.parse(text);
