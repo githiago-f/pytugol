@@ -14,11 +14,7 @@ export function bind(text: string) {
     const parsed = parse(text);
     const expression = binder.bindExpression(parsed.root);
 
-    binder.diagnostics.push(...parsed.diagnostics);
-
-    for(const diagnostic of binder.diagnostics) {
-        console.log(diagnostic);
-    }
+    binder.diagnostics.concat(parsed.diagnostics);
 
     return {binder, expression};
 }

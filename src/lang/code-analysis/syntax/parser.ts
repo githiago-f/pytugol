@@ -8,9 +8,10 @@ import {BinaryExperssionSyntax} from "./binary-experssion.syntax.ts";
 import {SyntaxTree} from "./syntax-tree.ts";
 import {SyntaxFacts} from "./syntax-facts.ts";
 import {UnaryExpressionSyntax} from "./unary-expression.syntax.ts";
+import {DiagnosticsRepository} from "../diagnostic.ts";
 
 export class Parser {
-    public diagnostics: string[] = [];
+    public diagnostics: DiagnosticsRepository;
     private _position = 0;
     private readonly _tokens: SyntaxToken[] = [];
 
@@ -56,7 +57,7 @@ export class Parser {
             return this.nextToken();
         }
 
-        this.diagnostics.push(`ERROR: Expected ${SyntaxKind[kind]} but got ${SyntaxKind[this.current.kind]}`);
+        this.diagnostics.reportKindMismatch(this.current, kind);
         return new SyntaxToken(kind, "", null, this.current.position);
     }
 

@@ -9,9 +9,10 @@ import {BoundUnaryExpression} from "./bound-unary-expression.ts";
 import {BoundBinaryExpression} from "./bound-binary-expression.ts";
 import {BoundBinaryOperator} from "./bound-binary-operator.ts";
 import {BoundUnaryOperator} from "./bound-unary-operator.ts";
+import {DiagnosticsRepository} from "../diagnostic.ts";
 
 export class Binder {
-    public readonly diagnostics: string[] = [];
+    public readonly diagnostics: DiagnosticsRepository = new DiagnosticsRepository();
 
     public bindExpression(syntax: ExpressionSyntax): BoundExpression {
         switch (syntax.kind) {
@@ -36,7 +37,7 @@ export class Binder {
         const boundOperator = BoundUnaryOperator.bind(syntax.operatorToken.kind, boundOperand.type);
 
         if(boundOperator === null) {
-            this.diagnostics.push(`ERROR: Unary operator ${syntax.operatorToken.text} is not defined for ${boundOperand.type}`);
+            this.diagnostics.reportUndefinedUnaryOperator(syntax.operatorToken, boundOperand.type);
             return boundOperand;
         }
 
@@ -53,8 +54,7 @@ export class Binder {
         );
 
         if(boundOperator === null) {
-            this.diagnostics.push(
-                `ERROR: Binary operator ${syntax.operatorToken.text} is not defined for ${boundLeft.type} and ${boundRight.type}`);
+            this.diagnostics.reportUndefinedBinaryOperator(syntax.operatorToken, boundLeft.type, boundRight.type);
             return boundLeft;
         }
 

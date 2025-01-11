@@ -6,6 +6,7 @@ import {SyntaxToken} from "../../../src/lang/code-analysis/syntax/syntax-token";
 import {SyntaxKind} from "../../../src/lang/code-analysis/syntax/syntax-kind";
 import {UnaryExpressionSyntax} from "../../../src/lang/code-analysis/syntax/unary-expression.syntax";
 import {parse} from "../helpers/parse";
+import {DiagnosticsRepository} from "../../../src/lang/code-analysis/diagnostic";
 
 describe('Parser', () => {
     describe('parse', () => {
@@ -14,7 +15,7 @@ describe('Parser', () => {
 
             prettyPrint(simpleSum.root);
 
-            expect(simpleSum.diagnostics).toHaveLength(0);
+            expect(simpleSum.diagnostics.toArray()).toHaveLength(0);
             expect(simpleSum).toBeDefined();
         });
 
@@ -24,16 +25,16 @@ describe('Parser', () => {
             prettyPrint(simpleSum.root);
 
             expect(simpleSum).toBeDefined();
-            expect(simpleSum.diagnostics).toHaveLength(0);
+            expect(simpleSum.diagnostics.toArray()).toHaveLength(0);
         });
 
         it('parses minus unary operator', () => {
             const simpleSum = SyntaxTree.parse('1 + -2');
 
-            expect(simpleSum.diagnostics).toHaveLength(0);
+            expect(simpleSum.diagnostics.toArray()).toHaveLength(0);
             expect(simpleSum).toStrictEqual(
                 new SyntaxTree(
-                    [],
+                    new DiagnosticsRepository(),
                     new BinaryExperssionSyntax(
                         new LiteralExpressionSyntax(new SyntaxToken(SyntaxKind.NumberToken, "1", 1, 0)),
                         new SyntaxToken(SyntaxKind.PlusToken, "+", null, 2),

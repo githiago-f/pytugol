@@ -33,13 +33,17 @@ describe('Evaluator', () => {
             expect(evaluate('3 != 3')).toBe(false);
         });
 
-        it('evaluate or expressions', () => {
+        it('evaluate comparators', () => {
+            expect(evaluate('1 + 2 >= 3')).toBe(true);
+            expect(evaluate('1 > 1')).toBe(false);
+            expect(evaluate('1 <= 2 - 1')).toBe(true);
+            expect(evaluate('1 < 1')).toBe(false);
+        });
+
+        it('evaluate "ou" and "e" expressions', () => {
             expect(evaluate('Verdadeiro ou Falso')).toBe(true);
             expect(evaluate('Falso ou Verdadeiro')).toBe(true);
             expect(evaluate('Falso ou Falso')).toBe(false);
-        });
-
-        it('evaluate and expressions', () => {
             expect(evaluate('1 == 1 e 1 == 3')).toBe(false);
             expect(evaluate('1 == 1 e Falso')).toBe(false);
         });

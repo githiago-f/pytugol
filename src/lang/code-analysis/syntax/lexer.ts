@@ -2,25 +2,22 @@ import {SyntaxToken} from "./syntax-token.ts";
 import {SyntaxKind} from "./syntax-kind.ts";
 import {isANumber, isLetter, isWhitespace} from "../../helpers/checkers.ts";
 import {SyntaxFacts} from "./syntax-facts.ts";
+import {DiagnosticsRepository} from "../diagnostic.ts";
+import {TextSpan} from "../text-span.ts";
 
 export class Lexer {
     private _position = 0;
-    private _line = 1;
-    private _column = 0;
-    private _diagnostics: string[] = [];
+
+    public readonly diagnostics: DiagnosticsRepository;
     private readonly _text: string;
 
     constructor(text: string) {
         this._text = text;
-    }
-
-    public get diagnostics() {
-        return this._diagnostics;
+        this.diagnostics = new DiagnosticsRepository();
     }
 
     private next() {
         this._position++;
-        this._column++;
     }
 
     private get current(): string {
@@ -43,22 +40,22 @@ export class Lexer {
             return new SyntaxToken(SyntaxKind.EndOfFileToken, "\0", null, this._position);
         }
 
+        const start = this._position;
+
         if(isANumber(this.current)) {
-            const start = this._position;
             while(isANumber(this.current) || this.current === '.') this.next();
 
             const text = this._text.substring(start, this._position);
 
             const num =  Number(text);
             if(isNaN(num)) {
-                this._diagnostics.push(`ERROR: ${num} is not a number`);
+                this.diagnostics.reportInvalidNumber(new TextSpan(start, length), text);
             }
 
             return new SyntaxToken(SyntaxKind.NumberToken, text, num, start);
         }
 
         if(isWhitespace(this.current)) {
-            const start = this._position;
             while(isWhitespace(this.current)) this.next();
 
             const text = this._text.substring(start, this._position);
@@ -67,7 +64,6 @@ export class Lexer {
         }
 
         if(isLetter(this.current)) {
-            const start = this._position;
             while(isLetter(this.current)) this.next();
 
             const text = this._text.substring(start, this._position);
@@ -84,24 +80,32 @@ export class Lexer {
             case '(': return new SyntaxToken(SyntaxKind.OpenParenthesisToken, '(', null, this._position++);
             case ')': return new SyntaxToken(SyntaxKind.CloseParenthesisToken, ')', null, this._position++);
             case '=':
-                if(this.lookahead === '=')
-                    return new SyntaxToken(SyntaxKind.EqEqToken, '==', null, this._position+=2);
+                if(this.lookahead === '=') {
+                    this._position+=2;
+                    return new SyntaxToken(SyntaxKind.EqEqToken, '==', null, start);
+                }
                 break;
             case '!':
-                if(this.lookahead === '=')
-                    return new SyntaxToken(SyntaxKind.NEqToken, '!=', null, this._position+=2);
+                if(this.lookahead === '=') {
+                    this._position+=2;
+                    return new SyntaxToken(SyntaxKind.NEqToken, '!=', null, start);
+                }
                 break;
             case '<':
-                if(this.lookahead === '=')
-                    return new SyntaxToken(SyntaxKind.LteToken, '<=', null, this._position+=2);
-                return new SyntaxToken(SyntaxKind.LtToken, '<', null, this._position+=2);
+                if(this.lookahead === '=') {
+                    this._position+=2;
+                    return new SyntaxToken(SyntaxKind.LteToken, '<=', null, start);
+                }
+                return new SyntaxToken(SyntaxKind.LtToken, '<', null, this._position++);
             case '>':
-                if(this.lookahead === '=')
-                    return new SyntaxToken(SyntaxKind.GteToken, '>=', null, this._position+=2);
-                return new SyntaxToken(SyntaxKind.GtToken, '>', null, this._position+=2);
+                if(this.lookahead === '=') {
+                    this._position+=2;
+                    return new SyntaxToken(SyntaxKind.GteToken, '>=', null, start);
+                }
+                return new SyntaxToken(SyntaxKind.GtToken, '>', null, this._position++);
         }
 
-        this._diagnostics.push("ERROR: Unexpected character: " + this.current + " at line " + this._line + " column " + this._column);
+        this.diagnostics.reportBadCharacter(this._position, this.current);
         return new SyntaxToken(SyntaxKind.BadToken, this._text.substring(this._position-1, 1), null, this._position++);
     }
 }
