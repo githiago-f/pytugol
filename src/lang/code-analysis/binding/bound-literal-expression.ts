@@ -1,8 +1,9 @@
 import {BoundExpression} from "./bound-expression.ts";
 import {BoundNodeKind} from "./bound-node-kind.ts";
+import {InternalType, LiteralInternalTypes} from "../internal-types.ts";
 
 export class BoundLiteralExpression extends BoundExpression {
-    constructor(public readonly value: any) {
+    constructor(public readonly value: LiteralInternalTypes) {
         super();
     }
 
@@ -10,7 +11,7 @@ export class BoundLiteralExpression extends BoundExpression {
         return BoundNodeKind.LiteralExpression;
     }
 
-    override get type(): string {
-        return typeof this.value;
+    override get type(): InternalType {
+        return typeof this.value as InternalType;
     }
 }

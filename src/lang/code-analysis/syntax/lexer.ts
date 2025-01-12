@@ -84,7 +84,7 @@ export class Lexer {
                     this._position+=2;
                     return new SyntaxToken(SyntaxKind.EqEqToken, '==', null, start);
                 }
-                break;
+                return new SyntaxToken(SyntaxKind.EqToken, '=', null, this._position++);
             case '!':
                 if(this.lookahead === '=') {
                     this._position+=2;

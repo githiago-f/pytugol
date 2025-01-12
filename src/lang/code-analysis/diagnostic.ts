@@ -52,12 +52,17 @@ export class DiagnosticsRepository {
     }
 
     public reportUndefinedUnaryOperator(operator: SyntaxToken, invalidType: string): void {
-        const message = `ERRO: Operador unário ${operator.text} não foi definido para ${invalidType}`;
+        const message = `ERRO: Operador unário "${operator.text}" não foi definido para ${invalidType}`;
         this.report(operator.span, message);
     }
 
     public reportUndefinedBinaryOperator(operator: SyntaxToken, leftType: string, rightType: string): void {
-        const message = `ERRO: Operador binário ${operator.text} não foi definido para ${leftType} e nem para ${rightType}`;
+        const message = `ERRO: Operador binário "${operator.text}" não foi definido para ${leftType} e nem para ${rightType}`;
         this.report(operator.span, message);
+    }
+
+    public reportUndefinedVariable(identifierToken: SyntaxToken) {
+        const message = `ERRO: Variavel "${identifierToken.text}" não existe`;
+        this.report(identifierToken.span, message);
     }
 }

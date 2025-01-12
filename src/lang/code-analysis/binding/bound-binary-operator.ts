@@ -1,13 +1,14 @@
 import {SyntaxKind} from "../syntax/syntax-kind.ts";
 import {BoundBinaryOperatorKind} from "./bound-binary-expression.ts";
+import {InternalType} from "../internal-types.ts";
 
 export class BoundBinaryOperator {
     private constructor(
         public readonly syntaxKind: SyntaxKind,
         public readonly kind: BoundBinaryOperatorKind,
-        public readonly leftType: string,
-        public readonly rightType: string = leftType,
-        public readonly resultType: string = rightType
+        public readonly leftType: InternalType,
+        public readonly rightType = leftType,
+        public readonly resultType = rightType
     ) {}
 
     private static _operators = [

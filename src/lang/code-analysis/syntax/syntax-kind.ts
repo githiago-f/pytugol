@@ -18,6 +18,7 @@ export enum SyntaxKind {
     GteToken = 'GteToken',
     LtToken = 'LtToken',
     LteToken = 'LteToken',
+    EqToken = 'EqToken',
 
     // literals
     NumberToken = 'NumberToken',
@@ -32,4 +33,6 @@ export enum SyntaxKind {
     UnaryExpression = 'UnaryExpression',
     BinaryExpression = 'BinaryExpression',
     ParenthesizedExpression = 'ParenthesizedExpression',
+    NameExpression = 'NameExpression',
+    AssignmentExpression = 'AssignmentExpression',
 }

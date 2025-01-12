@@ -1,12 +1,13 @@
 import {SyntaxKind} from "../syntax/syntax-kind.ts";
 import {BoundUnaryOperatorKind} from "./bound-unary-expression.ts";
+import {InternalType} from "../internal-types.ts";
 
 export class BoundUnaryOperator {
     private constructor(
         public readonly syntaxKind: SyntaxKind,
         public readonly kind: BoundUnaryOperatorKind,
-        public readonly operandType: string,
-        public readonly resultType: string = operandType
+        public readonly operandType: InternalType,
+        public readonly resultType = operandType
     ) {}
 
     private static _operators = [

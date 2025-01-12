@@ -4,11 +4,13 @@ import {SyntaxKind} from "./syntax-kind.ts";
 import {LiteralExpressionSyntax} from "./literal-expression.syntax.ts";
 import {ParenthesizedExpressionSyntax} from "./parenthesized-expression.syntax.ts";
 import {ExpressionSyntax} from "./expression.syntax.ts";
-import {BinaryExperssionSyntax} from "./binary-experssion.syntax.ts";
+import {BinaryExpressionSyntax} from "./binary-expression.syntax.ts";
 import {SyntaxTree} from "./syntax-tree.ts";
 import {SyntaxFacts} from "./syntax-facts.ts";
 import {UnaryExpressionSyntax} from "./unary-expression.syntax.ts";
 import {DiagnosticsRepository} from "../diagnostic.ts";
+import {AssignmentExpressionSyntax} from "./assignment-expression.syntax.ts";
+import {NameExpressionSyntax} from "./name-expression.syntax.ts";
 
 export class Parser {
     public diagnostics: DiagnosticsRepository;
@@ -67,13 +69,29 @@ export class Parser {
         return new SyntaxTree(this.diagnostics, expression, eofToken);
     }
 
-    private parseExpression(parentPrecedence = 0) {
+    private parseExpression() {
+        return this.parseAssignmentExpression();
+    }
+
+    private parseAssignmentExpression(): ExpressionSyntax {
+        if(this.peek(0).kind === SyntaxKind.IdentifierToken &&
+            this.peek(1).kind === SyntaxKind.EqToken) {
+            const identifier = this.nextToken();
+            const operator = this.nextToken();
+            const right = this.parseAssignmentExpression();
+            return new AssignmentExpressionSyntax(identifier, operator, right);
+        }
+
+        return this.parseBinaryExpression();
+    }
+
+    private parseBinaryExpression(parentPrecedence = 0) {
         let left: ExpressionSyntax;
         const unaryOperatorPrecedence = SyntaxFacts.getUnaryOperatorPrecedence(this.current.kind);
 
         if(unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence) {
             const operatorToken = this.nextToken();
-            const operand = this.parseExpression(unaryOperatorPrecedence);
+            const operand = this.parseBinaryExpression(unaryOperatorPrecedence);
             left = new UnaryExpressionSyntax(operatorToken, operand);
         } else {
             left = this.parsePrimaryExpression();
@@ -87,8 +105,8 @@ export class Parser {
             }
 
             const operatorToken = this.nextToken();
-            const right = this.parseExpression(precedence);
-            left = new BinaryExperssionSyntax(left, operatorToken, right);
+            const right = this.parseBinaryExpression(precedence);
+            left = new BinaryExpressionSyntax(left, operatorToken, right);
         }
 
         return left;
@@ -98,7 +116,7 @@ export class Parser {
         switch (this.current.kind) {
             case SyntaxKind.OpenParenthesisToken:
                 const left = this.nextToken();
-                const expression = this.parseExpression();
+                const expression = this.parseBinaryExpression();
                 const right = this.matchToken(SyntaxKind.CloseParenthesisToken);
                 return new ParenthesizedExpressionSyntax(left, expression, right);
             case SyntaxKind.TrueKeywordToken:
@@ -106,6 +124,9 @@ export class Parser {
                 const keywordToken = this.nextToken();
                 const value = keywordToken.kind === SyntaxKind.TrueKeywordToken;
                 return new LiteralExpressionSyntax(keywordToken, value);
+            case SyntaxKind.IdentifierToken:
+                const identifierToken = this.nextToken();
+                return new NameExpressionSyntax(identifierToken);
             default:
                 const numberToken = this.matchToken(SyntaxKind.NumberToken);
                 return new LiteralExpressionSyntax(numberToken);

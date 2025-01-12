@@ -3,7 +3,7 @@ import {SyntaxToken} from "./syntax-token.ts";
 import {SyntaxKind} from "./syntax-kind.ts";
 import {SyntaxNode} from "./syntax-node.ts";
 
-export class BinaryExperssionSyntax extends ExpressionSyntax {
+export class BinaryExpressionSyntax extends ExpressionSyntax {
     public readonly kind = SyntaxKind.BinaryExpression;
     public readonly children: SyntaxNode[];
 

@@ -2,9 +2,15 @@ import {BoundExpression} from "./binding/bound-expression.ts";
 import {BoundLiteralExpression} from "./binding/bound-literal-expression.ts";
 import {BoundUnaryExpression, BoundUnaryOperatorKind} from "./binding/bound-unary-expression.ts";
 import {BoundBinaryExpression, BoundBinaryOperatorKind} from "./binding/bound-binary-expression.ts";
+import {BoundVariableExpression} from "./binding/bound-variable-expression.ts";
+import {BoundAssignmentExpression} from "./binding/bound-assignment-expression.ts";
+import {VariableSymbol} from "./variable-symbol.ts";
 
 export class Evaluator {
-    constructor(private readonly _root: BoundExpression) {}
+    constructor(
+        private readonly _root: BoundExpression,
+        private readonly _variables: Map<VariableSymbol, any>
+    ) {}
 
     public evaluate(): any {
         return this.evaluateExpression(this._root);
@@ -13,6 +19,16 @@ export class Evaluator {
     private evaluateExpression(exp: BoundExpression): any {
         if(exp instanceof BoundLiteralExpression) {
             return exp.value;
+        }
+
+        if(exp instanceof BoundVariableExpression) {
+            return this._variables.get(exp.variable);
+        }
+
+        if(exp instanceof BoundAssignmentExpression) {
+            const value = this.evaluateExpression(exp.expression);
+            this._variables.set(exp.variable, value);
+            return value;
         }
 
         if(exp instanceof BoundUnaryExpression) {

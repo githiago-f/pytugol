@@ -1,6 +1,16 @@
-import {evaluate} from "../helpers/parse";
+import {SyntaxTree} from "../../../src/lang/code-analysis/syntax/syntax-tree";
+import {Compilation} from "../../../src/lang/code-analysis/compilation";
+import {VariableSymbol} from "../../../src/lang/code-analysis/variable-symbol";
 
 describe('Evaluator', () => {
+    let evaluate = (code: string, variables = new Map<VariableSymbol, any>()) => {
+        const syntaxTree = SyntaxTree.parse(code);
+
+        const compilation = new Compilation(syntaxTree);
+        const result = compilation.evaluate(variables);
+        return result.value;
+    };
+
     describe('.evaluate', () => {
         it('evaluate expression syntax tree', () => {
             expect(evaluate('1 + 2')).toBe(3);
@@ -46,6 +56,16 @@ describe('Evaluator', () => {
             expect(evaluate('Falso ou Falso')).toBe(false);
             expect(evaluate('1 == 1 e 1 == 3')).toBe(false);
             expect(evaluate('1 == 1 e Falso')).toBe(false);
+        });
+
+        it('evaluate assignment operators', () => {
+            const variables = new Map<VariableSymbol, any>();
+            expect(evaluate('a = 10', variables)).toBe(10);
+            expect(evaluate('a', variables)).toBe(10);
+
+            expect(evaluate('a == 3', new Map([[new VariableSymbol("a", "number"), 3]]))).toBe(true);
+
+            expect(evaluate('a == 3', new Map([[new VariableSymbol("a", "boolean"), true]]))).toBe(null);
         });
     });
 });
