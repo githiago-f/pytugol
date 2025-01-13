@@ -16,24 +16,23 @@ describe('Parser', () => {
             return tree;
         };
 
-        it('parses expression syntax tree', () => {
+        it('parses expression syntax tree without errors', () => {
             const { diagnostics } = parse('1 + 2');
 
             expect(diagnostics.toArray()).toHaveLength(0);
         });
 
         it('parses parenthesized expression syntax tree', () => {
-            const simpleSum = parse('1 + 2 * (2 + 5)');
+            const { diagnostics } = parse('1 + 2 * (2 + 5)');
 
-            expect(simpleSum).toBeDefined();
-            expect(simpleSum.diagnostics.toArray()).toHaveLength(0);
+            expect(diagnostics.toArray()).toHaveLength(0);
         });
 
         it('parses minus unary operator', () => {
-            const simpleSum = SyntaxTree.parse('1 + -2');
+            const tree = parse('1 + -2');
 
-            expect(simpleSum.diagnostics.toArray()).toHaveLength(0);
-            expect(simpleSum).toStrictEqual(
+            expect(tree.diagnostics.toArray()).toHaveLength(0);
+            expect(tree).toStrictEqual(
                 new SyntaxTree(
                     new DiagnosticsRepository(),
                     new BinaryExpressionSyntax(
