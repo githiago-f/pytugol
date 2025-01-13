@@ -4,7 +4,7 @@ import {ExpressionSyntax} from "./expression.syntax.ts";
 
 export class LiteralExpressionSyntax extends ExpressionSyntax {
     public readonly kind: SyntaxKind;
-    public readonly children: SyntaxToken[];
+    public override readonly children: SyntaxToken[];
 
     constructor(
         public readonly literalToken: SyntaxToken,

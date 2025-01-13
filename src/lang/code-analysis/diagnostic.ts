@@ -24,11 +24,11 @@ export class DiagnosticsRepository {
         this._diagnostics.push(new Diagnostic(span, message));
     }
 
-    get diagnostics() {
+    get diagnostics(): readonly Diagnostic[] {
         return this._diagnostics;
     }
 
-    toArray() {
+    toArray(): readonly Diagnostic[] {
         return this._diagnostics;
     }
 

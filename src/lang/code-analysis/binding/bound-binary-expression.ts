@@ -15,6 +15,7 @@ export enum BoundBinaryOperatorKind {
     GreaterEqualThan = 'GreaterEqualThan',
     LessEqualThan = 'LessEqualThan',
     LessThan = 'LessThan',
+    Modulus = 'Modulus',
 }
 
 export class BoundBinaryExpression extends BoundExpression {

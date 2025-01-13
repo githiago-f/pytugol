@@ -24,7 +24,7 @@ export class Parser {
         let token;
 
         do {
-            token = lexer.nextToken();
+            token = lexer.lexToken();
 
             if(token?.kind === SyntaxKind.WhitespaceToken || token?.kind === SyntaxKind.BadToken) {
                 continue;
@@ -115,21 +115,38 @@ export class Parser {
     private parsePrimaryExpression(): ExpressionSyntax {
         switch (this.current.kind) {
             case SyntaxKind.OpenParenthesisToken:
-                const left = this.nextToken();
-                const expression = this.parseBinaryExpression();
-                const right = this.matchToken(SyntaxKind.CloseParenthesisToken);
-                return new ParenthesizedExpressionSyntax(left, expression, right);
+                return this.parseParenthesizedExpression();
             case SyntaxKind.TrueKeywordToken:
             case SyntaxKind.FalseKeywordToken:
-                const keywordToken = this.nextToken();
-                const value = keywordToken.kind === SyntaxKind.TrueKeywordToken;
-                return new LiteralExpressionSyntax(keywordToken, value);
+                return this.parseBooleanExpression();
+            case SyntaxKind.NumberToken:
+                return this.parseNumberExpression();
             case SyntaxKind.IdentifierToken:
-                const identifierToken = this.nextToken();
-                return new NameExpressionSyntax(identifierToken);
             default:
-                const numberToken = this.matchToken(SyntaxKind.NumberToken);
-                return new LiteralExpressionSyntax(numberToken);
+                return this.parseNameExpression();
         }
+    }
+
+    private parseNumberExpression() {
+        const numberToken = this.matchToken(SyntaxKind.NumberToken);
+        return new LiteralExpressionSyntax(numberToken);
+    }
+
+    private parseNameExpression() {
+        const identifierToken = this.nextToken();
+        return new NameExpressionSyntax(identifierToken);
+    }
+
+    private parseBooleanExpression() {
+        const keywordToken = this.nextToken();
+        const value = keywordToken.kind === SyntaxKind.TrueKeywordToken;
+        return new LiteralExpressionSyntax(keywordToken, value);
+    }
+
+    private parseParenthesizedExpression() {
+        const left = this.nextToken();
+        const expression = this.parseBinaryExpression();
+        const right = this.matchToken(SyntaxKind.CloseParenthesisToken);
+        return new ParenthesizedExpressionSyntax(left, expression, right);
     }
 }

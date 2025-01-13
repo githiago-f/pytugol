@@ -22,6 +22,7 @@ export class BoundBinaryOperator {
         new BoundBinaryOperator(SyntaxKind.MinusToken, BoundBinaryOperatorKind.Subtraction, 'number'),
         new BoundBinaryOperator(SyntaxKind.StarToken, BoundBinaryOperatorKind.Multiplication, 'number'),
         new BoundBinaryOperator(SyntaxKind.SlashToken, BoundBinaryOperatorKind.Division, 'number'),
+        new BoundBinaryOperator(SyntaxKind.ModToken, BoundBinaryOperatorKind.Modulus, 'number'),
 
         new BoundBinaryOperator(SyntaxKind.EqEqToken, BoundBinaryOperatorKind.Equals, 'number', 'number', 'boolean'),
         new BoundBinaryOperator(SyntaxKind.NEqToken, BoundBinaryOperatorKind.NotEquals, 'number', 'number', 'boolean'),

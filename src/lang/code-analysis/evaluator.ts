@@ -26,61 +26,73 @@ export class Evaluator {
         }
 
         if(exp instanceof BoundAssignmentExpression) {
-            const value = this.evaluateExpression(exp.expression);
-            this._variables.set(exp.variable, value);
-            return value;
+            return this.evaluateAssignmentExpression(exp);
         }
 
         if(exp instanceof BoundUnaryExpression) {
-            const operand = this.evaluateExpression(exp.operand);
-            switch (exp.operator.kind) {
-                case BoundUnaryOperatorKind.IDENTITY:
-                    return operand;
-                case BoundUnaryOperatorKind.NEGATION:
-                    return -(operand as number);
-                case BoundUnaryOperatorKind.LOGICAL_NEGATION:
-                    return !(operand as boolean);
-                default:
-                    throw new Error("Unexpected unary operator " + exp.operator.kind);
-            }
+            return this.evaluateUnaryExpression(exp);
         }
 
         if(exp instanceof BoundBinaryExpression) {
-            const left = this.evaluateExpression(exp.left);
-            const right = this.evaluateExpression(exp.right);
-
-            switch(exp.operator.kind) {
-                case BoundBinaryOperatorKind.Addition:
-                    return (left as number) + (right as number);
-                case BoundBinaryOperatorKind.Division:
-                    return (left as number) / (right as number);
-                case BoundBinaryOperatorKind.Multiplication:
-                    return (left as number) * (right as number);
-                case BoundBinaryOperatorKind.Subtraction:
-                    return (left as number) - (right as number);
-                case BoundBinaryOperatorKind.LogicalOr:
-                    return (left as boolean) || (right as boolean);
-                case BoundBinaryOperatorKind.LogicalAnd:
-                    return (left as boolean) && (right as boolean);
-
-                case BoundBinaryOperatorKind.NotEquals:
-                    return left !== right;
-                case BoundBinaryOperatorKind.Equals:
-                    return left === right;
-                case BoundBinaryOperatorKind.LessEqualThan:
-                    return left <= right;
-                case BoundBinaryOperatorKind.GreaterEqualThan:
-                    return left >= right;
-                case BoundBinaryOperatorKind.LessThan:
-                    return left < right;
-                case BoundBinaryOperatorKind.GreaterThan:
-                    return left > right;
-
-                default:
-                    throw new Error("Unrecognized expression: " + exp.kind);
-            }
+            return this.evaluateBinaryExpression(exp);
         }
 
         throw new Error("Unrecognized expression: " + exp.kind);
+    }
+
+    private evaluateBinaryExpression(exp: BoundBinaryExpression) {
+        const left = this.evaluateExpression(exp.left);
+        const right = this.evaluateExpression(exp.right);
+
+        switch (exp.operator.kind) {
+            case BoundBinaryOperatorKind.Addition:
+                return (left as number) + (right as number);
+            case BoundBinaryOperatorKind.Division:
+                return (left as number) / (right as number);
+            case BoundBinaryOperatorKind.Multiplication:
+                return (left as number) * (right as number);
+            case BoundBinaryOperatorKind.Subtraction:
+                return (left as number) - (right as number);
+            case BoundBinaryOperatorKind.LogicalOr:
+                return (left as boolean) || (right as boolean);
+            case BoundBinaryOperatorKind.LogicalAnd:
+                return (left as boolean) && (right as boolean);
+
+            case BoundBinaryOperatorKind.NotEquals:
+                return left !== right;
+            case BoundBinaryOperatorKind.Equals:
+                return left === right;
+            case BoundBinaryOperatorKind.LessEqualThan:
+                return left <= right;
+            case BoundBinaryOperatorKind.GreaterEqualThan:
+                return left >= right;
+            case BoundBinaryOperatorKind.LessThan:
+                return left < right;
+            case BoundBinaryOperatorKind.GreaterThan:
+                return left > right;
+
+            default:
+                throw new Error("Unrecognized expression: " + exp.kind);
+        }
+    }
+
+    private evaluateAssignmentExpression(exp: BoundAssignmentExpression) {
+        const value = this.evaluateExpression(exp.expression);
+        this._variables.set(exp.variable, value);
+        return value;
+    }
+
+    private evaluateUnaryExpression(exp: BoundUnaryExpression) {
+        const operand = this.evaluateExpression(exp.operand);
+        switch (exp.operator.kind) {
+            case BoundUnaryOperatorKind.IDENTITY:
+                return operand;
+            case BoundUnaryOperatorKind.NEGATION:
+                return -(operand as number);
+            case BoundUnaryOperatorKind.LOGICAL_NEGATION:
+                return !(operand as boolean);
+            default:
+                throw new Error("Unexpected unary operator " + exp.operator.kind);
+        }
     }
 }

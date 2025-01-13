@@ -7,7 +7,7 @@ import {VariableSymbol} from "./variable-symbol.ts";
 
 export class EvaluationResult {
     constructor(
-        public readonly diagnostics: Diagnostic[],
+        public readonly diagnostics: readonly Diagnostic[],
         public readonly value: any
     ) {}
 }

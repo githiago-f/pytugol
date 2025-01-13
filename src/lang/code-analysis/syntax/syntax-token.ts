@@ -12,11 +12,9 @@ export class SyntaxToken extends SyntaxNode {
         super();
     }
 
-    get children(): SyntaxNode[] {
-        return [];
-    }
+    public override readonly children = [];
 
-    get span(): TextSpan {
+    public override get span() {
         return new TextSpan(this.position, this.text.length);
     }
 }

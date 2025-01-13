@@ -5,19 +5,22 @@ export enum SyntaxKind {
     WhitespaceToken = 'WhitespaceToken',
     PlusToken = 'PlusToken',
     MinusToken = 'MinusToken',
+    ModToken = 'ModToken',
+    StarToken = 'StarToken',
+    SlashToken = 'SlashToken',
     NotToken = 'NotToken',
     OrToken = 'OrToken',
     AndToken = 'AndToken',
-    StarToken = 'StarToken',
-    SlashToken = 'SlashToken',
     OpenParenthesisToken = 'OpenParenthesisToken',
     CloseParenthesisToken = 'CloseParenthesisToken',
+
     EqEqToken = 'EqEqToken',
     NEqToken = 'NEqToken',
     GtToken = 'GtToken',
     GteToken = 'GteToken',
     LtToken = 'LtToken',
     LteToken = 'LteToken',
+
     EqToken = 'EqToken',
 
     // literals

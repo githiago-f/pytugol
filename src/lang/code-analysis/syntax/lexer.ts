@@ -7,6 +7,7 @@ import {TextSpan} from "../text-span.ts";
 
 export class Lexer {
     private _position = 0;
+    private _start = 0;
 
     public readonly diagnostics: DiagnosticsRepository;
     private readonly _text: string;
@@ -35,77 +36,87 @@ export class Lexer {
         return this._text[index];
     }
 
-    public nextToken(): SyntaxToken {
-        if(this._position >= this._text.length) {
-            return new SyntaxToken(SyntaxKind.EndOfFileToken, "\0", null, this._position);
-        }
-
-        const start = this._position;
+    public lexToken(): SyntaxToken {
+        this._start = this._position;
 
         if(isANumber(this.current)) {
-            while(isANumber(this.current) || this.current === '.') this.next();
-
-            const text = this._text.substring(start, this._position);
-
-            const num =  Number(text);
-            if(isNaN(num)) {
-                this.diagnostics.reportInvalidNumber(new TextSpan(start, length), text);
-            }
-
-            return new SyntaxToken(SyntaxKind.NumberToken, text, num, start);
+            return this.readNumber();
         }
 
         if(isWhitespace(this.current)) {
-            while(isWhitespace(this.current)) this.next();
-
-            const text = this._text.substring(start, this._position);
-
-            return new SyntaxToken(SyntaxKind.WhitespaceToken, text, null, start);
+            return this.readWhitespace();
         }
 
         if(isLetter(this.current)) {
-            while(isLetter(this.current)) this.next();
-
-            const text = this._text.substring(start, this._position);
-            const kind = SyntaxFacts.getKeywordKind(text);
-
-            return new SyntaxToken(kind, text, null, start);
+            return this.readIdentifierOrKeyword();
         }
 
         switch(this.current) {
-            case '+': return new SyntaxToken(SyntaxKind.PlusToken, '+', null, this._position++);
-            case '-': return new SyntaxToken(SyntaxKind.MinusToken, '-', null, this._position++);
-            case '*': return new SyntaxToken(SyntaxKind.StarToken, '*', null, this._position++);
-            case '/': return new SyntaxToken(SyntaxKind.SlashToken, '/', null, this._position++);
-            case '(': return new SyntaxToken(SyntaxKind.OpenParenthesisToken, '(', null, this._position++);
-            case ')': return new SyntaxToken(SyntaxKind.CloseParenthesisToken, ')', null, this._position++);
+            case '\0': return new SyntaxToken(SyntaxKind.EndOfFileToken, "\0", null, this._position);
+            case '+':  return new SyntaxToken(SyntaxKind.PlusToken, '+', null, this._position++);
+            case '-':  return new SyntaxToken(SyntaxKind.MinusToken, '-', null, this._position++);
+            case '*':  return new SyntaxToken(SyntaxKind.StarToken, '*', null, this._position++);
+            case '/':  return new SyntaxToken(SyntaxKind.SlashToken, '/', null, this._position++);
+            case '%':  return new SyntaxToken(SyntaxKind.ModToken, '%', null, this._position++);
+            case '(':  return new SyntaxToken(SyntaxKind.OpenParenthesisToken, '(', null, this._position++);
+            case ')':  return new SyntaxToken(SyntaxKind.CloseParenthesisToken, ')', null, this._position++);
             case '=':
                 if(this.lookahead === '=') {
                     this._position+=2;
-                    return new SyntaxToken(SyntaxKind.EqEqToken, '==', null, start);
+                    return new SyntaxToken(SyntaxKind.EqEqToken, '==', null, this._start);
                 }
                 return new SyntaxToken(SyntaxKind.EqToken, '=', null, this._position++);
             case '!':
                 if(this.lookahead === '=') {
                     this._position+=2;
-                    return new SyntaxToken(SyntaxKind.NEqToken, '!=', null, start);
+                    return new SyntaxToken(SyntaxKind.NEqToken, '!=', null, this._start);
                 }
                 break;
             case '<':
                 if(this.lookahead === '=') {
                     this._position+=2;
-                    return new SyntaxToken(SyntaxKind.LteToken, '<=', null, start);
+                    return new SyntaxToken(SyntaxKind.LteToken, '<=', null, this._start);
                 }
                 return new SyntaxToken(SyntaxKind.LtToken, '<', null, this._position++);
             case '>':
                 if(this.lookahead === '=') {
                     this._position+=2;
-                    return new SyntaxToken(SyntaxKind.GteToken, '>=', null, start);
+                    return new SyntaxToken(SyntaxKind.GteToken, '>=', null, this._start);
                 }
                 return new SyntaxToken(SyntaxKind.GtToken, '>', null, this._position++);
         }
 
         this.diagnostics.reportBadCharacter(this._position, this.current);
         return new SyntaxToken(SyntaxKind.BadToken, this._text.substring(this._position-1, 1), null, this._position++);
+    }
+
+    private readIdentifierOrKeyword() {
+        while (isLetter(this.current)) this.next();
+
+        const text = this._text.substring(this._start, this._position);
+        const kind = SyntaxFacts.getKeywordKind(text);
+
+        return new SyntaxToken(kind, text, null, this._start);
+    }
+
+    private readWhitespace() {
+        while (isWhitespace(this.current)) this.next();
+
+        const text = this._text.substring(this._start, this._position);
+
+        return new SyntaxToken(SyntaxKind.WhitespaceToken, text, null, this._start);
+    }
+
+    private readNumber() {
+        while (isANumber(this.current) || this.current === '.') this.next();
+
+        const text = this._text.substring(this._start, this._position);
+
+        const num = Number(text);
+        if (isNaN(num)) {
+            this.diagnostics.reportInvalidNumber(new TextSpan(this._start, length), text);
+        }
+
+        return new SyntaxToken(SyntaxKind.NumberToken, text, num, this._start);
     }
 }
