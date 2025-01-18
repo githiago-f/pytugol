@@ -1,4 +1,4 @@
-export type InternalType = "string" | "number" | "boolean" | "object" | "function";
+export type InternalType = "string" | "number" | "boolean" | "object" | "function" | "null";
 
 export type LiteralInternalTypes = string | number | boolean | object | null;
 
