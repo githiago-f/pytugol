@@ -12,6 +12,7 @@ export class BoundLiteralExpression extends BoundExpression {
     }
 
     override get type(): InternalType {
+        if(this.value === null) return 'null';
         return typeof this.value as InternalType;
     }
 }

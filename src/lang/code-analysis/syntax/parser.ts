@@ -11,16 +11,17 @@ import {UnaryExpressionSyntax} from "./unary-expression.syntax.ts";
 import {DiagnosticsRepository} from "../diagnostic.ts";
 import {AssignmentExpressionSyntax} from "./assignment-expression.syntax.ts";
 import {NameExpressionSyntax} from "./name-expression.syntax.ts";
+import {SourceText} from "../text/source-text.ts";
 
 export class Parser {
     public diagnostics: DiagnosticsRepository;
     private _position = 0;
     private readonly _tokens: SyntaxToken[] = [];
 
-    constructor(text: string) {
+    constructor(private readonly _text: SourceText) {
         const tokens: SyntaxToken[] = [];
 
-        const lexer = new Lexer(text);
+        const lexer = new Lexer(_text);
         let token;
 
         do {
@@ -66,7 +67,7 @@ export class Parser {
     public parse(): SyntaxTree {
         const expression = this.parseExpression();
         const eofToken = this.matchToken(SyntaxKind.EndOfFileToken);
-        return new SyntaxTree(this.diagnostics, expression, eofToken);
+        return new SyntaxTree(this._text, this.diagnostics, expression, eofToken);
     }
 
     private parseExpression() {

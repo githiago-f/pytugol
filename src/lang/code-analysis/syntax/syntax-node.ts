@@ -1,5 +1,5 @@
 import {SyntaxKind} from "./syntax-kind.ts";
-import {TextSpan} from "../text-span.ts";
+import {TextSpan} from "../text/text-span.ts";
 
 export abstract class SyntaxNode {
     public abstract kind: SyntaxKind;

@@ -8,3 +8,4 @@ export class TextSpan {
         return this.start + this.length;
     }
 }
+

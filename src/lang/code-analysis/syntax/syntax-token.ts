@@ -1,6 +1,6 @@
 import {SyntaxKind} from "./syntax-kind.ts";
 import {SyntaxNode} from "./syntax-node.ts";
-import {TextSpan} from "../text-span.ts";
+import {TextSpan} from "../text/text-span.ts";
 
 export class SyntaxToken extends SyntaxNode {
     constructor(
@@ -15,6 +15,6 @@ export class SyntaxToken extends SyntaxNode {
     public override readonly children = [];
 
     public override get span() {
-        return new TextSpan(this.position, this.text.length);
+        return new TextSpan(this.position, this?.text?.length ?? 0);
     }
 }

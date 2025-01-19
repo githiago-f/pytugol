@@ -3,16 +3,17 @@ import {SyntaxKind} from "./syntax-kind.ts";
 import {isANumber, isLetter, isWhitespace} from "../../helpers/checkers.ts";
 import {SyntaxFacts} from "./syntax-facts.ts";
 import {DiagnosticsRepository} from "../diagnostic.ts";
-import {TextSpan} from "../text-span.ts";
+import {TextSpan} from "../text/text-span.ts";
+import {SourceText} from "../text/source-text.ts";
 
 export class Lexer {
     private _position = 0;
     private _start = 0;
 
     public readonly diagnostics: DiagnosticsRepository;
-    private readonly _text: string;
+    private readonly _text: SourceText;
 
-    constructor(text: string) {
+    constructor(text: SourceText) {
         this._text = text;
         this.diagnostics = new DiagnosticsRepository();
     }
@@ -33,7 +34,7 @@ export class Lexer {
         if (index >= this._text.length) {
             return "\0";
         }
-        return this._text[index];
+        return this._text.get(index);
     }
 
     public lexToken(): SyntaxToken {
@@ -87,13 +88,13 @@ export class Lexer {
         }
 
         this.diagnostics.reportBadCharacter(this._position, this.current);
-        return new SyntaxToken(SyntaxKind.BadToken, this._text.substring(this._position-1, 1), null, this._position++);
+        return new SyntaxToken(SyntaxKind.BadToken, this._text.getByRange(this._position-1, 1), null, this._position++);
     }
 
     private readIdentifierOrKeyword() {
         while (isLetter(this.current)) this.next();
 
-        const text = this._text.substring(this._start, this._position);
+        const text = this._text.getByRange(this._start, this._position);
         const kind = SyntaxFacts.getKeywordKind(text);
 
         return new SyntaxToken(kind, text, null, this._start);
@@ -102,7 +103,7 @@ export class Lexer {
     private readWhitespace() {
         while (isWhitespace(this.current)) this.next();
 
-        const text = this._text.substring(this._start, this._position);
+        const text = this._text.getByRange(this._start, this._position);
 
         return new SyntaxToken(SyntaxKind.WhitespaceToken, text, null, this._start);
     }
@@ -110,7 +111,7 @@ export class Lexer {
     private readNumber() {
         while (isANumber(this.current) || this.current === '.') this.next();
 
-        const text = this._text.substring(this._start, this._position);
+        const text = this._text.getByRange(this._start, this._position);
 
         const num = Number(text);
         if (isNaN(num)) {
